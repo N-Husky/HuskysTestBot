@@ -22,6 +22,7 @@ namespace Husky_sTestBot
             //Add bot`s commands
             commandsList.Add(new HelloCommand());
             commandsList.Add(new CurrentWeatherCommand());
+            commandsList.Add(new GetOverclockersNews());
             return client;
         }
         public static void Bot_OnMessage(object sender, MessageEventArgs e)
