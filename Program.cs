@@ -12,12 +12,11 @@ namespace Husky_sTestBot
     class Program
     {
         public static TelegramBotClient client = new TelegramBotClient("1518555654:AAFfSOqwFPbstNTICgqg9WlTJWIXudInqQY");
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             Console.WriteLine("Bot started: " + DateTime.Now);
             Bot.Get().StartReceiving();
             Bot.Get().OnMessage += Bot.Bot_OnMessage;
-
             Console.ReadLine();
         }
 
