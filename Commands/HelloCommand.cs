@@ -14,8 +14,6 @@ namespace Husky_sTestBot.Commands
         {
             var chatId = message.Chat.Id;
             var messageId = message.MessageId;
-            DbConnector connector = new DbConnector();
-            connector.AddUserToDb(chatId, message.Chat.Username);
             await client.SendTextMessageAsync(chatId, "Hello, " + message.Chat.Username, replyToMessageId: messageId );
             connector.Close();
         }

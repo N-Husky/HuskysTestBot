@@ -29,7 +29,7 @@ namespace Husky_sTestBot
         }
         public void AddWeatherConf(int chatId, string userName, string city, string measurementSystem)
         {
-            string sql = $"select * from user where exists(select * from user where chatid={chatId})";
+            string sql = String.Format("select * from user where exists(select * from user where chatid={0})",chatId);
             SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
             command.CommandType = System.Data.CommandType.Text;
             SQLiteDataReader r = command.ExecuteReader();
