@@ -18,18 +18,24 @@ namespace Husky_sTestBot
         {
             m_dbConnection.Close();
         }
+        public string IsOpened()
+        {
+            return m_dbConnection.State.ToString();
+        }
         public void AddUserToDb(long chatId, string userName)
         {
-            m_dbConnection.Open();
-            string sql = String.Format("insert into user(chatid, name) values({0}, '{1}')",chatId, userName);
+            if (m_dbConnection.State.ToString() != "Open")
+                m_dbConnection.Open();
+            string sql = String.Format("insert into users(chatid, name) values({0}, '{1}')",chatId, userName);
             SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
             command.CommandType = System.Data.CommandType.Text;
             command.ExecuteNonQuery();
             m_dbConnection.Close();
         }
-        public void AddWeatherConf(int chatId, string userName, string city, string measurementSystem)
+        public void AddWeatherConf(long chatId, string userName, string city, string measurementSystem)
         {
-            string sql = String.Format("select * from user where exists(select * from user where chatid={0})",chatId);
+            m_dbConnection.Open();
+            string sql = String.Format("select * from users where exists(select * from users where chatid={0})",chatId);
             SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
             command.CommandType = System.Data.CommandType.Text;
             SQLiteDataReader r = command.ExecuteReader();
@@ -37,12 +43,31 @@ namespace Husky_sTestBot
             {
                 AddUserToDb(chatId, userName);
             }
-            sql = $"insert into weather (chatid, city, measurementsys) values ({chatId}, {city}, {measurementSystem})";
-            command = new SQLiteCommand(sql, m_dbConnection);
+            if (m_dbConnection.State.ToString() != "Open")
+                m_dbConnection.Open();
+            sql = String.Format("insert into weather (chatid, city, measurementsys) values ({0}, '{1}', '{2}')",chatId, city,measurementSystem);
+            command = new SQLiteCommand(sql, m_dbConnection); 
             command.CommandType = System.Data.CommandType.Text;
             command.ExecuteNonQuery();
+            m_dbConnection.Close();
         }
-        public void UpdateWeatherConf(int chatId, string city, string measurementSystem)
+        public string[] GetWeatherConf(long chatId)
+        {
+            m_dbConnection.Open();
+            string sql = String.Format("select * from weather where chatid = {0}", chatId);
+            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+            command.CommandType = System.Data.CommandType.Text;
+            SQLiteDataReader r = command.ExecuteReader();
+            string[] conf = new string[2];
+            while (r.Read())
+            {
+                conf[0] = r.GetString(1);
+                conf[1] = r.GetString(2);
+            }
+            m_dbConnection.Close();
+            return conf;
+        }
+        public void UpdateWeatherConf(long chatId, string city, string measurementSystem)
         {
 
         }

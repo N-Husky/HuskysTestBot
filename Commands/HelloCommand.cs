@@ -15,7 +15,6 @@ namespace Husky_sTestBot.Commands
             var chatId = message.Chat.Id;
             var messageId = message.MessageId;
             await client.SendTextMessageAsync(chatId, "Hello, " + message.Chat.Username, replyToMessageId: messageId );
-            connector.Close();
         }
     }
 }
