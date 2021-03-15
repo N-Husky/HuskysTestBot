@@ -6,7 +6,7 @@ namespace Husky_sTestBot.RESTServices.Weather{
         public double Speed { get; set; } 
 
         [JsonPropertyName("deg")]
-        public int Deg { get; set; } 
+        public double Deg { get; set; } 
 
         [JsonPropertyName("gust")]
         public double Gust { get; set; } 

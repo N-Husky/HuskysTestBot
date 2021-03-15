@@ -6,10 +6,10 @@ namespace Husky_sTestBot.RESTServices.Weather{
         public string Country { get; set; } 
 
         [JsonPropertyName("sunrise")]
-        public int Sunrise { get; set; } 
+        public double Sunrise { get; set; } 
 
         [JsonPropertyName("sunset")]
-        public int Sunset { get; set; } 
+        public double Sunset { get; set; } 
     }
 
 }
