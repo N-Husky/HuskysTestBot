@@ -39,8 +39,7 @@ namespace Husky_sTestBot.Commands
         {
             var chatId = message.Chat.Id;
             var messageId = message.MessageId;
-            DbConnector connector = new DbConnector();
-            string[] conf = connector.GetWeatherConf(message.Chat.Id);
+            string[] conf = WeatherConfig.GetWeatherConf(message.Chat.Id);
             string measurementSys = conf[1] == "default" ? "" : "&units=metric";
             Root root = await new CurrentWeatherRequest().RequestAsync(conf[0], measurementSys);
             StringBuilder response= new StringBuilder("Current weather: \n" +

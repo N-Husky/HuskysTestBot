@@ -17,9 +17,9 @@ namespace Husky_sTestBot
             Console.WriteLine("Bot started: " + DateTime.Now);
             Bot.Get().StartReceiving();
             Bot.Get().OnMessage += Bot.Bot_OnMessage;
+            //Bot.Get().OnMessage += Bot.Stub;
             Console.ReadLine();
         }
-
     }
 }
 

@@ -18,10 +18,8 @@ namespace Husky_sTestBot.RSSFeed
             List<OverclockersRss> retList = new List<OverclockersRss>();
             foreach (XmlNode xmlNode in list)
             {
-                if (int.Parse(xmlNode.SelectSingleNode("pubDate").InnerText.Split(' ')[1]) == DateTime.Today.Day)
-                {
-                    retList.Add(new OverclockersRss(xmlNode.SelectSingleNode("title").InnerText, xmlNode.SelectSingleNode("link").InnerText, xmlNode.SelectSingleNode("description").InnerText, xmlNode.SelectSingleNode("pubDate").InnerText, xmlNode.SelectSingleNode("category").InnerText));
-                }
+                    retList.Add(new OverclockersRss(xmlNode.SelectSingleNode("title").InnerText, xmlNode.SelectSingleNode("link").InnerText, xmlNode.SelectSingleNode("description").InnerText, 
+                        System.Text.RegularExpressions.Regex.Match(xmlNode.SelectSingleNode("link").InnerText, @"\d*-\d*-\d*").Value +"-"+System.Text.RegularExpressions.Regex.Match(xmlNode.SelectSingleNode("pubDate").InnerText, @"\d*:\d*:\d*").Value, xmlNode.SelectSingleNode("category").InnerText));
             }
             return retList;
         }

@@ -25,8 +25,15 @@ namespace Husky_sTestBot
             commandsList.Add(new CurrentWeatherCommand());
             commandsList.Add(new GetOverclockersNews());
             commandsList.Add(new WeatherConfig());
+            commandsList.Add(new NewsConfig());
             return client;
         }
+
+        internal static void Stub(object sender, MessageEventArgs e)
+        {
+            Console.WriteLine("Stub method, command sended by" + e.Message.Chat.Username + " at " + DateTime.Now);
+        }
+
         public static void Bot_OnMessage(object sender, MessageEventArgs e)
         {
             Console.WriteLine("Bot received messag e at: " + DateTime.Now + "\nFrom " + e.Message.Chat.Username + "\nCommand: " + e.Message.Text);
@@ -34,13 +41,10 @@ namespace Husky_sTestBot
             {
                 if (command.Contains(e.Message.Text))
                 {
-                    Console.WriteLine("Prev command before = " + PrevCommand?.Message.Text);
                     PrevCommand = e;
                     command.Execute(e.Message, Bot.Get());
-                    Console.WriteLine("Prev command after = " + PrevCommand.Message.Text);
                     break;
                 }
-                Console.WriteLine("Prev command after first if = " + PrevCommand?.Message.Text);
                 if(PrevCommand!=null && PrevCommand.Message.Text == "/wconfig@HuskyTestBot")
                 {
                     string config = e.Message.Text.Replace(" ", "");
@@ -50,8 +54,21 @@ namespace Husky_sTestBot
                         PrevCommand = null;
                         return;
                     }
-                    DbConnector connector = new DbConnector();
-                    connector.AddWeatherConf(PrevCommand.Message.Chat.Id, PrevCommand.Message.Chat.Username, config.Split(new char[] { ',' })[0], config.Split(new char[] { ',' })[1]);
+                    WeatherConfig.AddWeatherConf(PrevCommand.Message.Chat.Id, PrevCommand.Message.Chat.Username, config.Split(new char[] { ',' })[0], config.Split(new char[] { ',' })[1]);
+                    PrevCommand = null;
+                    break;
+                }
+                if(PrevCommand != null && PrevCommand.Message.Text == "/nconfig@HuskyTestBot")
+                {
+                    string config = e.Message.Text.Replace(" ", "");
+                    int temp;
+                    if (config.Split(new char[] { ',' }).Length != 1|| !Int32.TryParse(config,out temp))
+                    {
+                        //send error message
+                        PrevCommand = null;
+                        return;
+                    }
+                    NewsConfig.AddNewsConf(PrevCommand.Message.Chat.Id, Int32.Parse(config), PrevCommand.Message.Chat.Username);
                     PrevCommand = null;
                     break;
                 }
